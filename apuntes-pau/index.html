@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Apuntes PAU</title>
+  <meta name="description" content="Resume apuntes, fotos, PDFs y vídeos, haz comentarios de texto y estudia para la PAU con tus propios apuntes.">
+  <meta name="theme-color" content="#4338ca">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234338ca'/%3E%3Cpath d='M18 16h20l8 8v24a2 2 0 0 1-2 2H18a2 2 0 0 1-2-2V18a2 2 0 0 1 2-2z' fill='%23fff'/%3E%3Cpath d='M22 30h20M22 37h20M22 44h12' stroke='%234338ca' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#resumir">
+        <span class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </span>
+        Apuntes PAU
+      </a>
+      <span class="countdown-pill" id="countdown-pill" hidden></span>
+    </div>
+    <nav class="tabs" aria-label="Secciones">
+      <a href="#resumir" data-tab="resumir">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Resumir</span>
+      </a>
+      <a href="#comentario" data-tab="comentario">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span>Comentario</span>
+      </a>
+      <a href="#apuntes" data-tab="apuntes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>Mis apuntes</span>
+      </a>
+      <a href="#estudiar" data-tab="estudiar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span>Estudiar</span>
+      </a>
+      <a href="#ajustes" data-tab="ajustes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        <span>Ajustes</span>
+      </a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- ============ RESUMIR ============ -->
+    <section class="view" id="view-resumir" data-view="resumir" hidden>
+      <div class="view-head">
+        <h1>Resumir</h1>
+        <p class="lead">Pega un texto o añade fotos de tus apuntes, PDFs o un vídeo de clase.</p>
+      </div>
+
+      <div class="card">
+        <div class="grid-2">
+          <label class="field">
+            <span>Asignatura</span>
+            <select id="res-asignatura" data-subjects></select>
+          </label>
+          <label class="field">
+            <span>Tema <small>(opcional)</small></span>
+            <input id="res-tema" type="text" placeholder="Ej.: Tema 4 · La Restauración">
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Texto</span>
+          <textarea id="res-texto" rows="6" placeholder="Pega aquí el texto que quieras resumir…"></textarea>
+        </label>
+
+        <div class="field">
+          <span class="field-label">Archivos <small>(fotos, PDF, vídeo, .txt, subtítulos .srt/.vtt)</small></span>
+          <div id="res-files"></div>
+        </div>
+
+        <div id="res-video-opts" class="subcard" hidden>
+          <p class="subcard-title">🎬 Opciones del vídeo</p>
+          <label class="field">
+            <span>Fotogramas que se analizan</span>
+            <select id="res-frames">
+              <option value="8">8 (más barato)</option>
+              <option value="16" selected>16</option>
+              <option value="24">24 (más detalle)</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Transcripción <small>(muy recomendable)</small></span>
+            <textarea id="res-transcripcion" rows="4" placeholder="En YouTube: «…más» › «Mostrar transcripción», cópiala y pégala aquí. También puedes añadir un archivo de subtítulos .srt o .vtt."></textarea>
+          </label>
+          <p class="hint">Claude no oye el audio: ve los fotogramas (pizarra, diapositivas) y lee la transcripción.</p>
+        </div>
+
+        <fieldset class="field">
+          <legend>¿Qué quieres?</legend>
+          <div class="segmented" role="radiogroup">
+            <label><input type="radio" name="res-formato" value="resumen" checked><span>📝 Resumen</span></label>
+            <label><input type="radio" name="res-formato" value="esquema"><span>🗺️ Esquema</span></label>
+            <label><input type="radio" name="res-formato" value="puntos"><span>✅ Puntos clave</span></label>
+            <label><input type="radio" name="res-formato" value="facil"><span>🟢 Explícamelo fácil</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Longitud</legend>
+          <div class="segmented" role="radiogroup">
+            <label><input type="radio" name="res-longitud" value="breve"><span>Breve</span></label>
+            <label><input type="radio" name="res-longitud" value="normal" checked><span>Normal</span></label>
+            <label><input type="radio" name="res-longitud" value="detallado"><span>Detallado</span></label>
+          </div>
+        </fieldset>
+
+        <label class="check">
+          <input type="checkbox" id="res-transcribir">
+          <span>Pasar también a limpio el texto de las fotos o PDF (para guardarlo en tus apuntes)</span>
+        </label>
+
+        <div class="actions">
+          <button type="button" class="btn primary big" id="res-go">Resumir</button>
+        </div>
+      </div>
+
+      <div id="res-output"></div>
+    </section>
+
+    <!-- ============ COMENTARIO ============ -->
+    <section class="view" id="view-comentario" data-view="comentario" hidden>
+      <div class="view-head">
+        <h1>Comentario de texto</h1>
+        <p class="lead">Lengua, Filosofía e Historia de España, con la estructura de la PAU.</p>
+      </div>
+
+      <div class="card">
+        <fieldset class="field">
+          <legend>Asignatura</legend>
+          <div class="segmented" role="radiogroup">
+            <label><input type="radio" name="com-asig" value="lengua" checked><span>Lengua</span></label>
+            <label><input type="radio" name="com-asig" value="filosofia"><span>Filosofía</span></label>
+            <label><input type="radio" name="com-asig" value="historia"><span>Historia de España</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>¿Qué hago?</legend>
+          <div class="segmented" role="radiogroup">
+            <label><input type="radio" name="com-modo" value="modelo" checked><span>✍️ Comentario modelo</span></label>
+            <label><input type="radio" name="com-modo" value="guia"><span>🧭 Guíame para hacerlo yo</span></label>
+            <label><input type="radio" name="com-modo" value="corregir"><span>🔍 Corrige el mío</span></label>
+          </div>
+        </fieldset>
+
+        <details class="estructura" id="com-estructura">
+          <summary>Ver la estructura que se va a seguir</summary>
+          <div class="md" id="com-estructura-body"></div>
+        </details>
+
+        <label class="field">
+          <span>Texto a comentar</span>
+          <textarea id="com-texto" rows="8" placeholder="Pega aquí el texto… (o añade una foto o PDF del texto abajo)"></textarea>
+        </label>
+        <div class="field">
+          <span class="field-label">Foto o PDF del texto <small>(opcional)</small></span>
+          <div id="com-files"></div>
+        </div>
+
+        <label class="field">
+          <span>Datos del texto <small>(opcional)</small></span>
+          <input id="com-datos" type="text" placeholder="Autor, obra, fecha… Ej.: Platón, La República, libro VII">
+        </label>
+
+        <div id="com-mio-wrap" class="subcard" hidden>
+          <p class="subcard-title">🧑‍🎓 Tu comentario</p>
+          <label class="field">
+            <span>Escríbelo o pégalo aquí</span>
+            <textarea id="com-mio" rows="10" placeholder="Tu comentario tal y como lo harías en el examen…"></textarea>
+          </label>
+          <div class="field">
+            <span class="field-label">…o haz fotos de tu comentario escrito a mano</span>
+            <div id="com-mio-files"></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn primary big" id="com-go">Hacer comentario</button>
+        </div>
+      </div>
+
+      <div id="com-output"></div>
+    </section>
+
+    <!-- ============ MIS APUNTES ============ -->
+    <section class="view" id="view-apuntes" data-view="apuntes" hidden>
+      <div class="view-head row">
+        <div>
+          <h1>Mis apuntes</h1>
+          <p class="lead">Tu base de datos para la PAU. Se guarda en este navegador.</p>
+        </div>
+        <button type="button" class="btn primary" id="ap-nuevo">+ Nuevo apunte</button>
+      </div>
+
+      <div class="toolbar">
+        <input type="search" id="ap-buscar" placeholder="Buscar en títulos, temas y contenido…" aria-label="Buscar">
+        <select id="ap-filtro-asig" aria-label="Filtrar por asignatura"></select>
+        <select id="ap-filtro-tipo" aria-label="Filtrar por tipo">
+          <option value="">Todo</option>
+          <option value="resumen">Resúmenes</option>
+          <option value="comentario">Comentarios</option>
+          <option value="apunte">Notas propias</option>
+          <option value="respuesta">Respuestas</option>
+        </select>
+      </div>
+
+      <div id="ap-stats" class="chips"></div>
+      <div id="ap-lista" class="note-list"></div>
+      <div id="ap-vacio" class="empty" hidden>
+        <p class="empty-icon" aria-hidden="true">📚</p>
+        <p><strong>Todavía no tienes apuntes.</strong></p>
+        <p>Resume algo y pulsa «Guardar en mis apuntes», o crea uno a mano con «+ Nuevo apunte».</p>
+      </div>
+    </section>
+
+    <!-- ============ ESTUDIAR ============ -->
+    <section class="view" id="view-estudiar" data-view="estudiar" hidden>
+      <div class="view-head">
+        <h1>Estudiar</h1>
+      </div>
+
+      <div class="card countdown">
+        <div class="countdown-num"><span id="cd-dias">—</span><small id="cd-label">días para la PAU</small></div>
+        <div class="countdown-side">
+          <div class="progress" aria-hidden="true"><span id="cd-bar"></span></div>
+          <p id="cd-texto" class="muted"></p>
+        </div>
+      </div>
+
+      <div class="segmented wide" role="tablist" id="est-modos">
+        <label><input type="radio" name="est-modo" value="tarjetas" checked><span>🃏 Tarjetas</span></label>
+        <label><input type="radio" name="est-modo" value="test"><span>📝 Test</span></label>
+        <label><input type="radio" name="est-modo" value="preguntar"><span>💬 Pregunta a tus apuntes</span></label>
+      </div>
+
+      <!-- Tarjetas -->
+      <div id="est-tarjetas" class="est-panel">
+        <div class="card">
+          <div class="toolbar">
+            <select id="tj-asig" aria-label="Asignatura de las tarjetas"></select>
+          </div>
+          <p id="tj-resumen" class="tj-resumen"></p>
+          <div class="actions">
+            <button type="button" class="btn primary big" id="tj-empezar">Empezar repaso</button>
+            <button type="button" class="btn" id="tj-todas">Repasar todas igualmente</button>
+          </div>
+          <p class="hint">Las tarjetas se crean desde un apunte: <b>Mis apuntes</b> › ábrelo › <b>🃏 Hacer tarjetas</b>. Se repasan con repetición espaciada: las que te sabes vuelven cada vez más tarde; las que fallas, enseguida.</p>
+        </div>
+
+        <div id="tj-sesion" class="card flash-session" hidden>
+          <div class="flash-top">
+            <span class="chip" id="tj-chip"></span>
+            <span class="muted" id="tj-progreso"></span>
+            <button type="button" class="icon-btn" id="tj-borrar" title="Borrar esta tarjeta" aria-label="Borrar esta tarjeta">🗑️</button>
+          </div>
+          <div class="flashcard">
+            <div class="md flash-front" id="tj-front"></div>
+            <div class="md flash-back" id="tj-back" hidden></div>
+          </div>
+          <div class="actions center" id="tj-acciones-ver">
+            <button type="button" class="btn primary big" id="tj-ver">Ver respuesta</button>
+          </div>
+          <div class="actions center grade" id="tj-acciones-nota" hidden>
+            <button type="button" class="btn bad" data-grade="mal">😕 No me la sabía</button>
+            <button type="button" class="btn meh" data-grade="regular">🤔 Más o menos</button>
+            <button type="button" class="btn good" data-grade="bien">😄 Me la sabía</button>
+          </div>
+          <div id="tj-fin" class="flash-end" hidden></div>
+        </div>
+      </div>
+
+      <!-- Test -->
+      <div id="est-test" class="est-panel" hidden>
+        <div class="card">
+          <div class="grid-3">
+            <label class="field">
+              <span>Asignatura</span>
+              <select id="ts-asig"></select>
+            </label>
+            <label class="field">
+              <span>Apuntes</span>
+              <select id="ts-apunte"></select>
+            </label>
+            <label class="field">
+              <span>Preguntas</span>
+              <select id="ts-num">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+            </label>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn primary big" id="ts-go">Generar test</button>
+          </div>
+          <p id="ts-historial" class="hint"></p>
+        </div>
+        <div id="ts-quiz"></div>
+      </div>
+
+      <!-- Preguntar -->
+      <div id="est-preguntar" class="est-panel" hidden>
+        <div class="card">
+          <label class="field">
+            <span>Asignatura</span>
+            <select id="pq-asig"></select>
+          </label>
+          <p id="pq-info" class="hint"></p>
+          <label class="field">
+            <span>Tu pregunta</span>
+            <textarea id="pq-pregunta" rows="3" placeholder="Ej.: ¿Qué diferencias hay entre el turno pacífico y el caciquismo? / Explícame la ley de Faraday con un ejemplo"></textarea>
+          </label>
+          <div class="actions">
+            <button type="button" class="btn primary big" id="pq-go">Preguntar</button>
+          </div>
+        </div>
+        <div id="pq-output"></div>
+      </div>
+    </section>
+
+    <!-- ============ AJUSTES ============ -->
+    <section class="view" id="view-ajustes" data-view="ajustes" hidden>
+      <div class="view-head">
+        <h1>Ajustes</h1>
+      </div>
+
+      <div class="card">
+        <h2>🔑 Conexión con Claude</h2>
+        <p>La web usa <b>Claude</b> (la IA de Anthropic) con tu propia clave de API. Pasos:</p>
+        <ol class="steps">
+          <li>Entra en <a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a> y crea una cuenta.</li>
+          <li>En <b>Billing</b> añade saldo (con 5 $ salen unos 50-100 resúmenes con Opus 5.5, y el doble con Sonnet 5.5).</li>
+          <li>En <b>API Keys</b> crea una clave y pégala aquí.</li>
+        </ol>
+        <label class="field">
+          <span>Clave de API</span>
+          <div class="input-row">
+            <input id="aj-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+            <button type="button" class="btn" id="aj-key-ver">Mostrar</button>
+          </div>
+        </label>
+        <div class="actions">
+          <button type="button" class="btn primary" id="aj-key-guardar">Guardar y probar</button>
+          <button type="button" class="btn ghost" id="aj-key-borrar">Borrar clave</button>
+        </div>
+        <p class="hint">🔒 La clave se guarda solo en este navegador y solo se envía a Anthropic. No la uses en ordenadores compartidos.</p>
+
+        <label class="field">
+          <span>Modelo</span>
+          <select id="aj-modelo"></select>
+        </label>
+        <p class="hint" id="aj-modelo-info"></p>
+      </div>
+
+      <div class="card">
+        <h2>🎓 La PAU</h2>
+        <div class="grid-2">
+          <label class="field">
+            <span>Fecha del primer examen</span>
+            <input id="aj-fecha" type="date">
+          </label>
+          <label class="field">
+            <span>Comunidad autónoma</span>
+            <input id="aj-region" type="text" placeholder="Ej.: Castilla-La Mancha">
+          </label>
+        </div>
+        <p class="hint">La comunidad sirve para que los comentarios y preguntas se adapten a tu PAU. Cambia la fecha cuando salga la oficial.</p>
+        <label class="field">
+          <span>Asignaturas <small>(una por línea)</small></span>
+          <textarea id="aj-asignaturas" rows="8"></textarea>
+        </label>
+      </div>
+
+      <div class="card">
+        <h2>📋 Criterios de corrección</h2>
+        <p class="hint">Opcional. Pega aquí los criterios oficiales de tu universidad o lo que pide tu profesor/a. Tendrán prioridad sobre la estructura por defecto de los comentarios.</p>
+        <label class="field">
+          <span>Lengua</span>
+          <textarea id="aj-crit-lengua" rows="4" placeholder="Ej.: El resumen no debe superar 1/3 del texto. La valoración crítica vale 2 puntos…"></textarea>
+        </label>
+        <label class="field">
+          <span>Filosofía</span>
+          <textarea id="aj-crit-filosofia" rows="4"></textarea>
+        </label>
+        <label class="field">
+          <span>Historia de España</span>
+          <textarea id="aj-crit-historia" rows="4"></textarea>
+        </label>
+      </div>
+
+      <div class="card">
+        <h2>💶 Gasto aproximado</h2>
+        <p id="aj-gasto" class="big-number"></p>
+        <p class="hint">Es una estimación hecha con los tokens de cada respuesta. El gasto real lo ves en console.anthropic.com.</p>
+        <div class="actions">
+          <button type="button" class="btn ghost" id="aj-gasto-reset">Poner a cero</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>💾 Copia de seguridad</h2>
+        <p>Tus apuntes y tarjetas se guardan en <b>este navegador</b>. Haz copias de vez en cuando y úsalas para pasarlos al móvil u otro ordenador.</p>
+        <div class="actions">
+          <button type="button" class="btn primary" id="aj-exportar">⬇️ Descargar copia</button>
+          <label class="btn">
+            <input type="file" id="aj-importar" accept="application/json,.json" hidden>
+            ⬆️ Cargar copia
+          </label>
+        </div>
+        <p class="hint" id="aj-datos-info"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Diálogo de apunte (ver / editar) -->
+  <dialog id="note-dialog" class="sheet" aria-labelledby="nd-titulo">
+    <div class="sheet-head">
+      <div class="sheet-title">
+        <h2 id="nd-titulo"></h2>
+        <div id="nd-meta" class="chips small"></div>
+      </div>
+      <button type="button" class="icon-btn" data-close aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="sheet-body">
+      <article id="nd-body" class="md"></article>
+
+      <form id="nd-form" class="note-form" hidden>
+        <label class="field">
+          <span>Título</span>
+          <input name="title" type="text" required>
+        </label>
+        <div class="grid-2">
+          <label class="field">
+            <span>Asignatura</span>
+            <select name="subject" data-subjects></select>
+          </label>
+          <label class="field">
+            <span>Tema</span>
+            <input name="topic" type="text" placeholder="Ej.: Tema 4">
+          </label>
+        </div>
+        <label class="field">
+          <span>Etiquetas <small>(separadas por comas)</small></span>
+          <input name="tags" type="text" placeholder="Ej.: repasar, cae mucho">
+        </label>
+        <div class="field">
+          <div class="field-label row">
+            <span>Contenido <small>(Markdown; fórmulas con $…$)</small></span>
+            <button type="button" class="btn small ghost" id="nd-preview-btn">Vista previa</button>
+          </div>
+          <textarea name="content" rows="14" class="mono"></textarea>
+          <article class="md preview" id="nd-preview" hidden></article>
+        </div>
+      </form>
+    </div>
+
+    <div class="sheet-actions" id="nd-actions-view">
+      <button type="button" class="btn" id="nd-editar">✏️ Editar</button>
+      <button type="button" class="btn" id="nd-tarjetas">🃏 Hacer tarjetas</button>
+      <button type="button" class="btn" id="nd-test">📝 Hacer test</button>
+      <button type="button" class="btn" id="nd-preguntar">💬 Preguntar</button>
+      <button type="button" class="btn" id="nd-copiar">📋 Copiar</button>
+      <button type="button" class="btn" id="nd-descargar">⬇️ .md</button>
+      <button type="button" class="btn danger" id="nd-borrar">🗑️ Borrar</button>
+    </div>
+    <div class="sheet-actions" id="nd-actions-edit" hidden>
+      <button type="button" class="btn" id="nd-cancelar">Cancelar</button>
+      <button type="button" class="btn primary" id="nd-guardar">Guardar</button>
+    </div>
+  </dialog>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+</body>
+</html>
